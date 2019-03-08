@@ -8,7 +8,9 @@ class App extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			operations: []
+			operations: [],
+			fadeOutDue: false,
+			fadeInDue: false
 		}
 	}
 	
@@ -17,34 +19,40 @@ class App extends Component {
 		
 		switch(value) {
 			case 'C':
-				this.setState({ operations: [] })
+				this.setState({ operations: [], fadeOutDue: false, fadeInDue: false })
 				break;
 				
 			case '←':
 			const newOperations = this.state.operations.slice(0,-1)
-				this.setState({ operations: newOperations })
+				this.setState({ operations: newOperations, fadeOutDue: false, fadeInDue: false })
 				break;
 				
 			case '=':
-				this.performCalculation()
+				this.setState({ fadeOutDue: true }, this.performCalculation())
 				break;
 			
 			default:
-				this.setState({ operations: [...this.state.operations, value] })
+				this.setState({ operations: [...this.state.operations, value], fadeOutDue: false, fadeInDue: false })
 				break
 		}
 		
 	}
 	
 	performCalculation = () => {
+		
 		let result = this.state.operations.join('')
 		if (result) {
 			result = math.eval(result)
 			result = math.format(result, { precision: 14})
 			result = String(result)
-			this.setState({
-				operations: [result]
-			})
+			setTimeout( () => {
+				this.setState({
+					operations: [result],
+					fadeOutDue: false,
+					fadeInDue: true
+				})
+			}, 500)
+			
 		}
 	}
 	
@@ -52,16 +60,19 @@ class App extends Component {
 		return (
 			<div className="App">
 			
-				<Display operations={this.state.operations} />
+				<Display
+					operations={this.state.operations}
+					fadeOutDue={this.state.fadeOutDue}
+					fadeInDue={this.state.fadeInDue}/>
 			
 				<Button onClick={this.handleClick} label="C" value="C"/>
 				<Button onClick={this.handleClick} label="←" value="←"/>
-				<Button onClick={this.handleClick} label="÷" value="÷"/>
+				<Button onClick={this.handleClick} label="÷" value="/"/>
 				
 				<Button onClick={this.handleClick} label="7" value="7"/>
 				<Button onClick={this.handleClick} label="8" value="8"/>
 				<Button onClick={this.handleClick} label="9" value="9"/>
-				<Button onClick={this.handleClick} label="9" value="*"/>
+				<Button onClick={this.handleClick} label="x" value="*"/>
 				
 				<Button onClick={this.handleClick} label="4" value="4"/>
 				<Button onClick={this.handleClick} label="5" value="5"/>
