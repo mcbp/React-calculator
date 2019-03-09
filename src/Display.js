@@ -11,8 +11,10 @@ class Display extends Component {
 	render() {
 		return (
 			<div className="Display">
+				<div className={"Display-tag"}><p>Display</p></div>
 				<p className={
-					(this.props.fadeOutDue ? 'fade-out' : '')
+					"Display-text "
+					+ (this.props.fadeOutDue ? 'fade-out' : '')
 					+ " " + (this.props.fadeInDue ? 'fade-in' : '')
 				}>
 					{this.props.operations.join('')}

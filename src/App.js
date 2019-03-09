@@ -41,19 +41,25 @@ class App extends Component {
 	performCalculation = () => {
 		
 		let result = this.state.operations.join('')
+		result = result.replace('÷','/').replace('x','*')
 		if (result) {
-			result = math.eval(result)
-			result = math.format(result, { precision: 14})
-			result = String(result)
+			try {
+				result = math.eval(result)
+				result = math.format(result, { precision: 14})
+				result = String(result).split('')
+			} catch (error) {
+				result = ["error: invalid expression"]
+			}
+			
 			setTimeout( () => {
 				this.setState({
-					operations: [result],
+					operations: result,
 					fadeOutDue: false,
 					fadeInDue: true
 				})
 			}, 500)
-			
 		}
+		
 	}
 	
 	render() {
@@ -63,16 +69,17 @@ class App extends Component {
 				<Display
 					operations={this.state.operations}
 					fadeOutDue={this.state.fadeOutDue}
-					fadeInDue={this.state.fadeInDue}/>
+					fadeInDue={this.state.fadeInDue}
+				/>
 			
 				<Button onClick={this.handleClick} label="C" value="C"/>
 				<Button onClick={this.handleClick} label="←" value="←"/>
-				<Button onClick={this.handleClick} label="÷" value="/"/>
+				<Button onClick={this.handleClick} label="÷" value="÷"/>
 				
 				<Button onClick={this.handleClick} label="7" value="7"/>
 				<Button onClick={this.handleClick} label="8" value="8"/>
 				<Button onClick={this.handleClick} label="9" value="9"/>
-				<Button onClick={this.handleClick} label="x" value="*"/>
+				<Button onClick={this.handleClick} label="x" value="x"/>
 				
 				<Button onClick={this.handleClick} label="4" value="4"/>
 				<Button onClick={this.handleClick} label="5" value="5"/>
