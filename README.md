@@ -1,3 +1,5 @@
 ## React Calculator
 
-A simple and effective React calculator
+A simple yet effective React calculator
+
+Deployed with netlify at: https://mcbp-react-calculator-app.netlify.com/
